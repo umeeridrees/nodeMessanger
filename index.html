@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <style>
+        html,
+        body {
+            min-height: 100%;
+            height: 100%;
+        }
+
+        #container {
+            margin: 0 auto;
+            position: relative;
+        }
+
+        #sidebar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+        }
+    </style>
+    <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script>
+        // client code here
+        $(document).ready(function () {
+            var counter = 0;
+            var poll = function () {
+                $.getJSON('/poll/' + counter, function (response) {
+                    counter = response.count;
+                    var elem = $('#sidebar');
+                    elem.append("<span class='badge badge-primary py-1 px-3 m-1'><h5>" + response.append +
+                        "</h5></span><br>");
+                    poll();
+                });
+            }
+            poll();
+            $('#btnsend').click(function () {
+                var message = $('#msg').val();
+                $.getJSON('/msg/' + message, function () {});
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container h-100">
+        <div id="container" class="container h-75">
+            <div id="sidebar" class="px-2 py-3">
+            </div>
+        </div>
+        <div class="container h-25 px-2 py-3">
+            <div class="row h-100">
+                <div class="col-12 h-100">
+                    <div class="form-group h-100">
+                        <textarea class="form-control h-75" id="msg"></textarea>
+                        <button id="btnsend" class="btn btn-primary float-right mt-1">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
